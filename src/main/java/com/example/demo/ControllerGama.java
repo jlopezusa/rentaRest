@@ -33,7 +33,7 @@ public class ControllerGama {
         return "Hello World";
     }
     
-    @PostMapping("/all")
+    @PostMapping("/save")
     public Gama insertData(@RequestBody Gama g){
         return gm.createGama(g);
     }
