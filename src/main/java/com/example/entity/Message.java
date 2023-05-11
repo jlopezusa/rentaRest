@@ -4,9 +4,18 @@
  */
 package com.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -18,23 +27,50 @@ import javax.persistence.Table;
 public class Message implements Serializable{
     
     @Id
-    private Long Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idMessage;
+    @Column(name="message_text")
     private String messageText;
-    private Long carId;
-    private Long clientId;
+    
+    @ManyToOne()
+    @JoinColumn(name = "carId")
+    @JsonIgnoreProperties("messages")
+    private Car car;
+    
+    @ManyToOne()
+    @JoinColumn(name="clientId")
+    @JsonIgnoreProperties("messages")
+    private Client client;
+    
+    public Message(){
+        super();
+    }
 
+    public Message(Long idMessage, String messageText, Car car, Client client) {
+        this.idMessage = idMessage;
+        this.messageText = messageText;
+        this.car = car;
+        this.client = client;
+    }
+
+    public Message(String messageText, Car car, Client client) {
+        this.messageText = messageText;
+        this.car = car;
+        this.client = client;
+    }
+    
     /**
      * @return the Id
      */
-    public Long getId() {
-        return Id;
+    public Long getIdMessage() {
+        return idMessage;
     }
 
     /**
      * @param Id the Id to set
      */
-    public void setId(Long Id) {
-        this.Id = Id;
+    public void setIdMessage(Long Id) {
+        this.idMessage = Id;
     }
 
     /**
@@ -49,34 +85,34 @@ public class Message implements Serializable{
      */
     public void setMessageText(String messageText) {
         this.messageText = messageText;
+    }    
+
+    /**
+     * @return the car
+     */
+    public Car getCar() {
+        return car;
     }
 
     /**
-     * @return the carId
+     * @param car the car to set
      */
-    public Long getCarId() {
-        return carId;
+    public void setCar(Car car) {
+        this.car = car;
     }
 
     /**
-     * @param carId the carId to set
+     * @return the client
      */
-    public void setCarId(Long carId) {
-        this.carId = carId;
+    public Client getClient() {
+        return client;
     }
 
     /**
-     * @return the clientId
+     * @param client the client to set
      */
-    public Long getClientId() {
-        return clientId;
-    }
-
-    /**
-     * @param clientId the clientId to set
-     */
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setClient(Client client) {
+        this.client = client;
     }
     
     

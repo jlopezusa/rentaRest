@@ -4,11 +4,11 @@
  */
 package com.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
+import org.hibernate.annotations.CreationTimestamp;
 
 /**
  *
@@ -19,25 +19,60 @@ import java.sql.Date;
 public class Reservation implements Serializable{
     
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idReservation;
+    @Column(name="start_date")
     private Date startDate;
+    @Column(name="devolution_date")
     private Date devolutionDate;
+    //@Column(columnDefinition="default 'created'")
     private String status;
-    private Long carId;
-    private Long clientId;
-
+    /*@CreationTimestamp
+    @Column(nullable = false, updatable = false, columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
+    private Date dateCreated;*/
+    
+    @ManyToOne()
+    @JoinColumn(name = "carId")
+    //@JsonIgnoreProperties("reservations")
+    private Car car;
+    
+    /*@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_car")
+    @JsonIgnoreProperties("car")
+    private Car car;*/
+    
+    @ManyToOne()
+    @JoinColumn(name="clientId")
+    @JsonIgnoreProperties("reservations")
+    private Client client;
+    
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Score score;
     /**
      * @return the id
      */
-    public Long getId() {
-        return id;
+    public Reservation(){
+    }
+    
+    public Reservation(Long idReservation, Date startDate, Date devolutionDate, String status, Car car, Client client, Score score) {
+        this.idReservation = idReservation;
+        this.startDate = startDate;
+        this.devolutionDate = devolutionDate;
+        this.status = status;
+        this.car = car;
+        this.client = client;
+        this.score = score;
+    }
+
+    public Long getIdReservation() {
+        return idReservation;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdReservation(Long id) {
+        this.idReservation = id;
     }
 
     /**
@@ -83,32 +118,44 @@ public class Reservation implements Serializable{
     }
 
     /**
-     * @return the carId
+     * @return the car
      */
-    public Long getCarId() {
-        return carId;
+    public Car getCar() {
+        return car;
     }
 
     /**
-     * @param carId the carId to set
+     * @param car the car to set
      */
-    public void setCarId(Long carId) {
-        this.carId = carId;
+    public void setCar(Car car) {
+        this.car = car;
     }
 
     /**
-     * @return the clientId
+     * @return the client
      */
-    public Long getClientId() {
-        return clientId;
+    public Client getClient() {
+        return client;
     }
 
     /**
-     * @param clientId the clientId to set
+     * @param client the client to set
      */
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setClient(Client client) {
+        this.client = client;
     }
-    
-    
+
+    /**
+     * @return the score
+     */
+    public Score getScore() {
+        return score;
+    }
+
+    /**
+     * @param score the score to set
+     */
+    public void setScore(Score score) {
+        this.score = score;
+    }
 }

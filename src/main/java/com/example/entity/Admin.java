@@ -5,11 +5,7 @@
 package com.example.entity;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *
@@ -21,23 +17,33 @@ public class Admin implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idAdmin;
     private String name;
     private String email;
     private String password;
 
-    /**
-     * @return the id
-     */
-    public Long getId() {
-        return id;
+    public Admin() {
+    }
+
+    public Admin(Long idAdmin, String name, String email, String password) {
+        this.idAdmin = idAdmin;
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 
     /**
-     * @param id the id to set
+     * @return the idAdmin
      */
-    public void setId(Long id) {
-        this.id = id;
+    public Long getIdAdmin() {
+        return idAdmin;
+    }
+
+    /**
+     * @param idAdmin the idAdmin to set
+     */
+    public void setIdAdmin(Long idAdmin) {
+        this.idAdmin = idAdmin;
     }
 
     /**
@@ -81,6 +87,5 @@ public class Admin implements Serializable{
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+ 
 }

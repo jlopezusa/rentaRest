@@ -4,12 +4,11 @@
  */
 package com.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
 
 /**
  *
@@ -20,25 +19,59 @@ import java.sql.Date;
 public class Car implements Serializable{
     
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idCar;
     private String name;
     private String brand;
-    private Long year;  
+    private int year;  
     private String description;
-    private Long gamaId;
+    
+    @ManyToOne()
+    @JoinColumn(name="gamaId")
+    @JsonIgnoreProperties("cars")
+    private Gama gama;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="car")
+    @JsonIgnoreProperties("car")
+    private List<Message> messages = new ArrayList<Message>();
+    
+    @OneToMany(mappedBy="car")
+    @JsonIgnoreProperties("car")
+    private List<Reservation> reservations = new ArrayList<Reservation>();
+    
 
+    public Car(){
+        //super();
+    }
+
+    public Car(String name, String brand, int year, String description, Gama gama) {
+        this.name = name;
+        this.brand = brand;
+        this.year = year;
+        this.description = description;
+        this.gama = gama;
+    }
+
+    public Car(Long idCar, String name, String brand, int year, String description, Gama gama) {
+        this.idCar = idCar;
+        this.name = name;
+        this.brand = brand;
+        this.year = year;
+        this.description = description;
+        this.gama = gama;
+    }
     /**
      * @return the id
      */
-    public Long getId() {
-        return id;
+    public Long getIdCar() {
+        return idCar;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdCar(Long id) {
+        this.idCar = id;
     }
 
     /**
@@ -72,14 +105,14 @@ public class Car implements Serializable{
     /**
      * @return the year
      */
-    public Long getYear() {
+    public int getYear() {
         return year;
     }
 
     /**
      * @param year the year to set
      */
-    public void setYear(Long year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
@@ -98,20 +131,44 @@ public class Car implements Serializable{
     }
 
     /**
-     * @return the gamaId
+     * @return the gama
      */
-    public Long getGamaId() {
-        return gamaId;
+    public Gama getGama() {
+        return gama;
     }
 
     /**
-     * @param gamaId the gamaId to set
+     * @param gama the gama to set
      */
-    public void setGamaId(Long gamaId) {
-        this.gamaId = gamaId;
+    public void setGama(Gama gama) {
+        this.gama = gama;
     }
-    
-    
-    
-    
+
+    /**
+     * @return the messages
+     */
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    /**
+     * @param messages the messages to set
+     */
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    /**
+     * @return the reservations
+     */
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    /**
+     * @param reservations the reservations to set
+     */
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 }

@@ -4,10 +4,13 @@
  */
 package com.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.persistence.*;
 
 /**
  *
@@ -18,22 +21,40 @@ import javax.persistence.Table;
 public class Gama implements Serializable{
     
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idGama;
     private String name;
     private String description;
-
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="gama", orphanRemoval = true)
+    @JsonIgnoreProperties("gama")
+    private List<Car> cars = new ArrayList<Car>();
+    
+    public Gama(){
+    }
+    
+    public Gama(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+    public Gama(Long idGama, String name, String description) {
+        this.idGama = idGama;
+        this.name = name;
+        this.description = description;
+    }
+            
     /**
-     * @return the id
+     * @return the idGama
      */
-    public Long getId() {
-        return id;
+    public Long getIdGama() {
+        return idGama;
     }
 
     /**
-     * @param id the id to set
+     * @param idGama the idGama to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdGama(Long idGama) {
+        this.idGama = idGama;
     }
 
     /**
@@ -62,7 +83,20 @@ public class Gama implements Serializable{
      */
     public void setDescription(String description) {
         this.description = description;
+    }    
+
+    /**
+     * @return the cars
+     */
+    public List<Car> getCars() {
+        return cars;
     }
-    
+
+    /**
+     * @param cars the cars to set
+     */
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
+    }
     
 }

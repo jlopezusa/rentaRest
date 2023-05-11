@@ -10,20 +10,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 /**
  *
  * @author Javis
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/Message")
 public class ControllerMessage {
     
@@ -35,12 +28,6 @@ public class ControllerMessage {
         return mg.getMessagesFromDB();
     }
     
-    /*public ResponseEntity<List> getPeople(){
-        ArrayList al = ps.getPeopleFromDB();
-        return ResponseEntity.ok(al);
-    }*/
-    
-    //@CrossOrigin(origins = "*")
     @GetMapping("/text")
     public String getText(){
         return "Hello World";
@@ -55,18 +42,16 @@ public class ControllerMessage {
     public Message updateData(@PathVariable("id") Long id,@RequestBody Message m){
         Message upm = mg.getMessage(id);
         upm.setMessageText(m.getMessageText());
-        upm.setClientId(m.getClientId());
-        upm.setCarId(m.getCarId());
+        upm.setClient(m.getClient());
+        upm.setCar(m.getCar());
         return mg.createMessage(upm);
     }
     
-    @CrossOrigin(origins = "*")
     @GetMapping("/get/{id}")
     public Optional<Message> getMessage(@PathVariable("id") Long id){
         return mg.getMById(id);
     }
     
-    @CrossOrigin(origins = "*")
     @DeleteMapping("/delete/{id}")
     public String deleteMessage(Message p, @PathVariable("id") Long id){
         boolean status = mg.deleteMessage(id);

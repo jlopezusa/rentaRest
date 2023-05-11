@@ -4,12 +4,12 @@
  */
 package com.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
 
 /**
  *
@@ -20,23 +20,42 @@ import java.sql.Date;
 public class Client implements Serializable{
     
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idClient;
     private String name;
     private String password;
     private int age;
+    
+    @OneToMany(mappedBy="client")
+    //@JsonIgnoreProperties("client")
+    private List<Message> messages = new ArrayList<Message>();
+    
+    @OneToMany(mappedBy="client")
+    //@JsonIgnoreProperties("client")
+    private List<Reservation> reservations = new ArrayList<Reservation>();
+
+    public Client() {
+    }
+
+    public Client(Long idClient, String name, String password, int age) {
+        this.idClient = idClient;
+        this.name = name;
+        this.password = password;
+        this.age = age;
+    }
 
     /**
      * @return the id
      */
-    public Long getId() {
-        return id;
+    public Long getIdClient() {
+        return idClient;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdClient(Long id) {
+        this.idClient = id;
     }
 
     /**
@@ -79,6 +98,34 @@ public class Client implements Serializable{
      */
     public void setAge(int age) {
         this.age = age;
+    }
+
+    /**
+     * @return the messages
+     */
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    /**
+     * @param messages the messages to set
+     */
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    /**
+     * @return the reservations
+     */
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    /**
+     * @param reservations the reservations to set
+     */
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
     
     

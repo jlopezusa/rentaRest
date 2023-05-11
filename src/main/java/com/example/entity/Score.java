@@ -5,9 +5,7 @@
 package com.example.entity;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *
@@ -18,23 +16,34 @@ import javax.persistence.Table;
 public class Score implements Serializable{
     
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idScore;
     private int score;
     private String message;
-    private Long reservationId;
 
-    /**
-     * @return the id
-     */
-    public Long getId() {
-        return id;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservationId")
+    private Reservation reservation;
+
+    public Score() {
+    }
+
+    public Score(Long idScore, int score, String message, Reservation reservation) {
+        this.idScore = idScore;
+        this.score = score;
+        this.message = message;
+        this.reservation = reservation;
+    }
+
+    public Long getIdScore() {
+        return idScore;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdScore(Long id) {
+        this.idScore = id;
     }
 
     /**
@@ -66,18 +75,16 @@ public class Score implements Serializable{
     }
 
     /**
-     * @return the reservationId
+     * @return the reservation
      */
-    public Long getReservationId() {
-        return reservationId;
+    public Reservation getReservation() {
+        return reservation;
     }
 
     /**
-     * @param reservationId the reservationId to set
+     * @param reservation the reservation to set
      */
-    public void setReservationId(Long reservationId) {
-        this.reservationId = reservationId;
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
-    
-    
 }

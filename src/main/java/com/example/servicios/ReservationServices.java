@@ -26,6 +26,7 @@ public class ReservationServices {
     }
     
     public Reservation createReservation(Reservation r){
+        r.setStatus("created");
         return reservationDao.save(r);
     }
     

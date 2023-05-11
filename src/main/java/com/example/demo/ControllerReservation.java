@@ -10,20 +10,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 /**
  *
  * @author Javis
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/Reservation")
 public class ControllerReservation {
     
@@ -35,12 +28,6 @@ public class ControllerReservation {
         return rs.getReservationsFromDB();
     }
     
-    /*public ResponseEntity<List> getPeople(){
-        ArrayList al = rs.getPeopleFromDB();
-        return ResponseEntity.ok(al);
-    }*/
-    
-    //@CrossOrigin(origins = "*")
     @GetMapping("/text")
     public String getText(){
         return "Hello World";
@@ -57,18 +44,16 @@ public class ControllerReservation {
         upr.setStartDate(r.getStartDate());
         upr.setDevolutionDate(r.getDevolutionDate());
         upr.setStatus(r.getStatus());
-        upr.setCarId(r.getCarId());
-        upr.setClientId(r.getClientId());
+        upr.setCar(r.getCar());
+        upr.setClient(r.getClient());
         return rs.createReservation(upr);
     }
     
-    @CrossOrigin(origins = "*")
     @GetMapping("/get/{id}")
     public Optional<Reservation> getReservation(@PathVariable("id") Long id){
         return rs.getRById(id);
     }
     
-    @CrossOrigin(origins = "*")
     @DeleteMapping("/delete/{id}")
     public String deleteReservation(Reservation p, @PathVariable("id") Long id){
         boolean status = rs.deleteReservation(id);
