@@ -33,7 +33,7 @@ public class ControllerClient {
         return "Hello World";
     }
     
-    @PostMapping("/save")
+    @PostMapping("/all")
     public Client insertData(@RequestBody Client c){
         return cs.createClient(c);
     }

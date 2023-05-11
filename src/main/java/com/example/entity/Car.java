@@ -41,7 +41,6 @@ public class Car implements Serializable{
     
 
     public Car(){
-        //super();
     }
 
     public Car(String name, String brand, int year, String description, Gama gama) {

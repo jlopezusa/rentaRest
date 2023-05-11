@@ -33,7 +33,7 @@ public class ControllerScore {
         return "Hello World";
     }
     
-    @PostMapping("/save")
+    @PostMapping("/all")
     public Score insertData(@RequestBody Score s){
         return sc.createScore(s);
     }

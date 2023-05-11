@@ -33,7 +33,7 @@ public class ControllerReservation {
         return "Hello World";
     }
     
-    @PostMapping("/save")
+    @PostMapping("/all")
     public Reservation insertData(@RequestBody Reservation r){
         return rs.createReservation(r);
     }

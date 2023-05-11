@@ -33,7 +33,7 @@ public class ControllerMessage {
         return "Hello World";
     }
     
-    @PostMapping("/save")
+    @PostMapping("/all")
     public Message insertData(@RequestBody Message m){
         return mg.createMessage(m);
     }

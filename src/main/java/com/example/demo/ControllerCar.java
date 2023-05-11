@@ -33,7 +33,7 @@ public class ControllerCar {
         return "Hello World";
     }
     
-    @PostMapping("/save")
+    @PostMapping("/all")
     public Car insertData(@RequestBody Car c){
         return cr.createCar(c);
     }

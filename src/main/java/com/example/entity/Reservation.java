@@ -33,13 +33,8 @@ public class Reservation implements Serializable{
     
     @ManyToOne()
     @JoinColumn(name = "carId")
-    //@JsonIgnoreProperties("reservations")
+    @JsonIgnoreProperties("reservations")
     private Car car;
-    
-    /*@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="id_car")
-    @JsonIgnoreProperties("car")
-    private Car car;*/
     
     @ManyToOne()
     @JoinColumn(name="clientId")
