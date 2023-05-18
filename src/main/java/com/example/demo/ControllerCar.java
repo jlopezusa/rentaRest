@@ -9,6 +9,7 @@ import com.example.entity.Car;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Javis
  */
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods={RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 @RequestMapping("/api/Car")
 public class ControllerCar {
     
@@ -34,18 +35,33 @@ public class ControllerCar {
     }
     
     @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
     public Car insertData(@RequestBody Car c){
         return cr.createCar(c);
     }
     
     @PutMapping("/update/{id}")
     public Car updateData(@PathVariable("id") Long id,@RequestBody Car c){
-        Car ucar = cr.getCar(id);
-        ucar.setName(c.getName());
-        ucar.setBrand(c.getBrand());
-        ucar.setYear(c.getYear());
-        ucar.setDescription(c.getDescription());
-        return cr.createCar(ucar);
+        if(c.getIdCar() != null){
+            Car ucar = cr.getCar(id);
+            if(ucar != null){
+                if(c.getName() != null){
+                    ucar.setName(c.getName());
+                }
+                if(c.getBrand() != null){
+                    ucar.setBrand(c.getBrand());
+                }
+                ucar.setYear(c.getYear());
+                if(c.getDescription()!= null){
+                    ucar.setDescription(c.getDescription());
+                }
+                return cr.createCar(ucar);
+            }else{
+                return c;
+            }
+        }else{
+            return null;
+        }
     }
     
     @GetMapping("/get/{id}")
@@ -54,12 +70,11 @@ public class ControllerCar {
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteCar(Car p, @PathVariable("id") Long id){
-        boolean status = cr.deleteCar(id);
-        if(status){
-            return "Carro eliminado con exito";
-        }else{
-            return "No se puede eliminar carro";
+    public Boolean deleteCar(Car p, @PathVariable("id") Long id){
+        boolean status = false;
+        if(cr.getCar(id) != null){
+            status = cr.deleteCar(id);
         }
+        return status;
     }
 }

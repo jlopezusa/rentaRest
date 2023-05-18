@@ -38,10 +38,11 @@ public class Reservation implements Serializable{
     
     @ManyToOne()
     @JoinColumn(name="clientId")
-    @JsonIgnoreProperties("reservations")
+    @JsonIgnoreProperties({"reservations","messages"})
     private Client client;
     
     @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("reservation")
     private Score score;
     /**
      * @return the id

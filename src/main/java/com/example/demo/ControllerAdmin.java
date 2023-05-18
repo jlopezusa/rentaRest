@@ -9,6 +9,7 @@ import com.example.entity.Admin;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Javis
  */
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods={RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 @RequestMapping("/api/Admin")
 public class ControllerAdmin {
     
@@ -34,17 +35,32 @@ public class ControllerAdmin {
     }
     
     @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
     public Admin insertData(@RequestBody Admin a){
         return as.createAdmin(a);
     }
     
     @PutMapping("/update/{id}")
     public Admin updateData(@PathVariable("id") Long id,@RequestBody Admin a){
-        Admin ad = as.getAdmin(id);
-        ad.setName(a.getName());
-        ad.setEmail(a.getEmail());
-        ad.setPassword(a.getPassword());
-        return as.createAdmin(ad);
+        if(a.getIdAdmin() != null){
+            Admin ad = as.getAdmin(id);
+            if(ad != null){
+                if(a.getName() != null){
+                    ad.setName(a.getName());
+                }
+                if(ad.getEmail() != null){
+                    ad.setEmail(a.getEmail());
+                }
+                if(ad.getPassword()!= null){
+                    ad.setPassword(a.getPassword());
+                }
+                return as.createAdmin(ad);
+            }else{
+                return a;
+            }
+        }else{
+            return null;
+        }
     }
     
     @GetMapping("/get/{id}")
@@ -53,12 +69,11 @@ public class ControllerAdmin {
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteAdmin(Admin p, @PathVariable("id") Long id){
-        boolean status = as.deleteAdmin(id);
-        if(status){
-            return "Persona eliminada con exito";
-        }else{
-            return "No se puedo eliminar persona";
+    public Boolean deleteAdmin(Admin p, @PathVariable("id") Long id){
+        boolean status = false;
+        if(as.getAdmin(id) != null){
+            status = as.deleteAdmin(id);
         }
+        return status;
     }
 }

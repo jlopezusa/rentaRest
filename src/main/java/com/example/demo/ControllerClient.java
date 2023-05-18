@@ -9,6 +9,7 @@ import com.example.entity.Client;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Javis
  */
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods={RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 @RequestMapping("/api/Client")
 public class ControllerClient {
     
@@ -34,17 +35,30 @@ public class ControllerClient {
     }
     
     @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
     public Client insertData(@RequestBody Client c){
         return cs.createClient(c);
     }
     
     @PutMapping("/update/{id}")
     public Client updateData(@PathVariable("id") Long id,@RequestBody Client c){
-        Client ucl = cs.getClient(id);
-        ucl.setName(c.getName());
-        ucl.setPassword(c.getPassword());
-        ucl.setAge(c.getAge());
-        return cs.createClient(ucl);
+        if(c.getIdClient() != null){
+            Client ucl = cs.getClient(id);
+            if(ucl != null){
+                if(c.getName() != null){
+                    ucl.setName(c.getName());
+                }
+                if(c.getPassword() != null){
+                    ucl.setPassword(c.getPassword());
+                }
+                ucl.setAge(c.getAge());
+                return cs.createClient(ucl);
+            }else{
+                return c;
+            }
+        }else{
+            return null;
+        }
     }
     
     @GetMapping("/get/{id}")
@@ -53,12 +67,11 @@ public class ControllerClient {
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteClient(Client p, @PathVariable("id") Long id){
-        boolean status = cs.deleteClient(id);
-        if(status){
-            return "Cliente eliminado con exito";
-        }else{
-            return "No se puede eliminar cliente";
+    public Boolean deleteClient(Client p, @PathVariable("id") Long id){
+        boolean status = false;
+        if(cs.getClient(id) != null){
+            status = cs.deleteClient(id);
         }
+        return status;
     }
 }

@@ -26,7 +26,7 @@ public class Gama implements Serializable{
     private String name;
     private String description;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="gama", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="gama", orphanRemoval = true)
     @JsonIgnoreProperties("gama")
     private List<Car> cars = new ArrayList<Car>();
     

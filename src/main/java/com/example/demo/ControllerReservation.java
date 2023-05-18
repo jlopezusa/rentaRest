@@ -9,6 +9,7 @@ import com.example.servicios.ReservationServices;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Javis
  */
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods={RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 @RequestMapping("/api/Reservation")
 public class ControllerReservation {
     
@@ -34,19 +35,38 @@ public class ControllerReservation {
     }
     
     @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
     public Reservation insertData(@RequestBody Reservation r){
         return rs.createReservation(r);
     }
     
     @PutMapping("/update/{id}")
     public Reservation updateData(@PathVariable("id") Long id,@RequestBody Reservation r){
-        Reservation upr = rs.getReservation(id);
-        upr.setStartDate(r.getStartDate());
-        upr.setDevolutionDate(r.getDevolutionDate());
-        upr.setStatus(r.getStatus());
-        upr.setCar(r.getCar());
-        upr.setClient(r.getClient());
-        return rs.createReservation(upr);
+        if(r.getIdReservation()!= null){
+            Reservation upr = rs.getReservation(id);
+            if(upr != null){
+                if(r.getStartDate() != null){
+                    upr.setStartDate(r.getStartDate());
+                }
+                if(r.getDevolutionDate() != null){
+                    upr.setDevolutionDate(r.getDevolutionDate());
+                }
+                if(r.getStatus() != null){
+                    upr.setStatus(r.getStatus());
+                }
+                if(r.getCar() != null){
+                    upr.setCar(r.getCar());
+                }
+                if(r.getClient() != null){
+                    upr.setClient(r.getClient());
+                }
+                return rs.createReservation(upr);
+            }else{
+                return r;
+            }
+        }else{
+            return null;
+        }
     }
     
     @GetMapping("/get/{id}")
@@ -55,12 +75,11 @@ public class ControllerReservation {
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteReservation(Reservation p, @PathVariable("id") Long id){
-        boolean status = rs.deleteReservation(id);
-        if(status){
-            return "Reservacion eliminada con exito";
-        }else{
-            return "No se puede eliminar reservacion";
+    public Boolean deleteReservation(Reservation p, @PathVariable("id") Long id){
+        boolean status = false;
+        if(rs.getReservation(id) != null){
+            status = rs.deleteReservation(id);
         }
+        return status;
     }
 }

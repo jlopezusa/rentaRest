@@ -31,12 +31,12 @@ public class Car implements Serializable{
     @JsonIgnoreProperties("cars")
     private Gama gama;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="car")
-    @JsonIgnoreProperties("car")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="car")
+    @JsonIgnoreProperties({"car","client"})
     private List<Message> messages = new ArrayList<Message>();
     
-    @OneToMany(mappedBy="car")
-    @JsonIgnoreProperties("car")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy="car")
+    @JsonIgnoreProperties({"car","client"})
     private List<Reservation> reservations = new ArrayList<Reservation>();
     
 

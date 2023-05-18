@@ -4,6 +4,7 @@
  */
 package com.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 
@@ -21,8 +22,13 @@ public class Score implements Serializable{
     private int score;
     private String message;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservationId")
+    private Reservation reservation;*/
+    
+    @OneToOne()
+    @JoinColumn(name = "reservationId")
+    @JsonIgnoreProperties("score")
     private Reservation reservation;
 
     public Score() {

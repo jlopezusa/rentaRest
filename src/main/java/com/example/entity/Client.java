@@ -26,12 +26,12 @@ public class Client implements Serializable{
     private String password;
     private int age;
     
-    @OneToMany(mappedBy="client")
-    //@JsonIgnoreProperties("client")
+    @OneToMany(cascade = {CascadeType.PERSIST},mappedBy="client")
+    @JsonIgnoreProperties("client")
     private List<Message> messages = new ArrayList<Message>();
     
-    @OneToMany(mappedBy="client")
-    //@JsonIgnoreProperties("client")
+    @OneToMany(cascade = {CascadeType.PERSIST},mappedBy="client")
+    @JsonIgnoreProperties("client")
     private List<Reservation> reservations = new ArrayList<Reservation>();
 
     public Client() {

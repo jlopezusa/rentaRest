@@ -9,6 +9,7 @@ import com.example.servicios.MessageServices;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Javis
  */
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods={RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 @RequestMapping("/api/Message")
 public class ControllerMessage {
     
@@ -34,17 +35,32 @@ public class ControllerMessage {
     }
     
     @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
     public Message insertData(@RequestBody Message m){
         return mg.createMessage(m);
     }
     
     @PutMapping("/update/{id}")
     public Message updateData(@PathVariable("id") Long id,@RequestBody Message m){
-        Message upm = mg.getMessage(id);
-        upm.setMessageText(m.getMessageText());
-        upm.setClient(m.getClient());
-        upm.setCar(m.getCar());
-        return mg.createMessage(upm);
+        if(m.getIdMessage()!= null){
+            Message upm = mg.getMessage(id);
+            if(upm != null){
+                if(m.getMessageText() != null){
+                    upm.setMessageText(m.getMessageText());
+                }
+                if(m.getClient() != null){
+                    upm.setClient(m.getClient());
+                }
+                if(m.getCar() != null){
+                    upm.setCar(m.getCar());
+                }
+                return mg.createMessage(upm);
+            }else{
+                return m;
+            }
+        }else{
+            return null;
+        }
     }
     
     @GetMapping("/get/{id}")
@@ -53,12 +69,11 @@ public class ControllerMessage {
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteMessage(Message p, @PathVariable("id") Long id){
-        boolean status = mg.deleteMessage(id);
-        if(status){
-            return "Mensaje eliminada con exito";
-        }else{
-            return "No se puedo eliminar Mensaje";
+    public Boolean deleteMessage(Message p, @PathVariable("id") Long id){
+        boolean status = false;
+        if(mg.getMessage(id) != null){
+            status = mg.deleteMessage(id);
         }
+        return status;
     }
 }

@@ -9,6 +9,7 @@ import com.example.servicios.ScoreServices;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Javis
  */
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods={RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 @RequestMapping("/api/Score")
 public class ControllerScore {
     
@@ -34,17 +35,30 @@ public class ControllerScore {
     }
     
     @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
     public Score insertData(@RequestBody Score s){
         return sc.createScore(s);
     }
     
     @PutMapping("/update/{id}")
     public Score updateData(@PathVariable("id") Long id,@RequestBody Score s){
-        Score ups = sc.getScore(id);
-        ups.setScore(s.getScore());
-        ups.setMessage(s.getMessage());
-        ups.setReservation(s.getReservation());
-        return sc.createScore(ups);
+        if(s.getIdScore()!= null){
+            Score ups = sc.getScore(id);
+            if(ups != null){
+                ups.setScore(s.getScore());
+                if(s.getMessage() != null){
+                    ups.setMessage(s.getMessage());
+                }
+                if(s.getReservation() != null){
+                    ups.setReservation(s.getReservation());
+                }
+                return sc.createScore(ups);
+            }else{
+                return s;
+            }
+        }else{
+            return null;
+        }
     }
     
     @GetMapping("/get/{id}")
@@ -53,12 +67,11 @@ public class ControllerScore {
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteScore(Score p, @PathVariable("id") Long id){
-        boolean status = sc.deleteScore(id);
-        if(status){
-            return "Score eliminado con exito";
-        }else{
-            return "No se puede eliminar score";
+    public Boolean deleteScore(Score p, @PathVariable("id") Long id){
+        boolean status = false;
+        if(sc.getScore(id) != null){
+            status = sc.deleteScore(id);
         }
+        return status;
     }
 }

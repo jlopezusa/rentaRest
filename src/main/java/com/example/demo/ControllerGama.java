@@ -9,6 +9,7 @@ import com.example.servicios.GamaServices;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Javis
  */
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods={RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 @RequestMapping("/api/Gama")
 public class ControllerGama {
     
@@ -34,16 +35,29 @@ public class ControllerGama {
     }
     
     @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
     public Gama insertData(@RequestBody Gama g){
         return gm.createGama(g);
     }
     
     @PutMapping("/update/{id}")
-    public Gama updateData(@PathVariable("id") Long id,@RequestBody Gama g){
-        Gama upg = gm.getGama(id);
-        upg.setName(g.getName());
-        upg.setDescription(g.getDescription());
-        return gm.createGama(upg);
+    public Gama updateData(@PathVariable("id") Long id,@RequestBody Gama g){ 
+        if(g.getIdGama()!= null){
+            Gama upg = gm.getGama(id);
+            if(upg != null){
+                if(g.getName() != null){
+                    upg.setName(g.getName());
+                }
+                if(g.getDescription() != null){
+                    upg.setDescription(g.getDescription());
+                }
+                return gm.createGama(upg);
+            }else{
+                return g;
+            }
+        }else{
+            return null;
+        }
     }
     
     @GetMapping("/get/{id}")
@@ -52,12 +66,11 @@ public class ControllerGama {
     }
     
     @DeleteMapping("/delete/{id}")
-    public String deleteGama(Gama p, @PathVariable("id") Long id){
-        boolean status = gm.deleteGama(id);
-        if(status){
-            return "Gama eliminada con exito";
-        }else{
-            return "No se puede eliminar Gama";
+    public Boolean deleteGama(Gama p, @PathVariable("id") Long id){
+        boolean status = false;
+        if(gm.getGama(id) != null){
+            status = gm.deleteGama(id);
         }
+        return status;
     }
 }
