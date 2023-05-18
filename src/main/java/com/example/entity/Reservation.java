@@ -7,7 +7,7 @@ package com.example.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import org.hibernate.annotations.CreationTimestamp;
 
 /**
