@@ -92,7 +92,7 @@ public class Client implements Serializable{
      * @return the password
      */
     public String getEmail() {
-        return password;
+        return email;
     }
 
     /**
