@@ -24,6 +24,7 @@ public class Client implements Serializable{
     private Long idClient;
     private String name;
     private String password;
+    private String email;
     private int age;
     
     @OneToMany(cascade = {CascadeType.PERSIST},mappedBy="client")
@@ -37,10 +38,11 @@ public class Client implements Serializable{
     public Client() {
     }
 
-    public Client(Long idClient, String name, String password, int age) {
+    public Client(Long idClient, String name, String password, String email,int age) {
         this.idClient = idClient;
         this.name = name;
         this.password = password;
+        this.email = email;
         this.age = age;
     }
 
@@ -84,6 +86,20 @@ public class Client implements Serializable{
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    /**
+     * @return the password
+     */
+    public String getEmail() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**

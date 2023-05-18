@@ -51,6 +51,9 @@ public class ControllerClient {
                 if(c.getPassword() != null){
                     ucl.setPassword(c.getPassword());
                 }
+                if(c.getEmail() != null){
+                    ucl.setPassword(c.getEmail());
+                }
                 ucl.setAge(c.getAge());
                 return cs.createClient(ucl);
             }else{
