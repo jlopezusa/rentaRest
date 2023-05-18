@@ -6,7 +6,6 @@ package com.example.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
@@ -22,9 +21,9 @@ public class Client implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idClient;
-    private String name;
-    private String password;
     private String email;
+    private String password;
+    private String name;
     private int age;
     
     @OneToMany(cascade = {CascadeType.PERSIST},mappedBy="client")
@@ -38,11 +37,11 @@ public class Client implements Serializable{
     public Client() {
     }
 
-    public Client(Long idClient, String name, String password, String email,int age) {
+    public Client(Long idClient, String email, String password, String name ,int age) {
         this.idClient = idClient;
-        this.name = name;
-        this.password = password;
         this.email = email;
+        this.password = password;
+        this.name = name;
         this.age = age;
     }
 
