@@ -40,10 +40,11 @@ public class ControllerScore {
         return sc.createScore(s);
     }
     
-    @PutMapping("/update/{id}")
-    public Score updateData(@PathVariable("id") Long id,@RequestBody Score s){
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Score updateData(@RequestBody Score s){
         if(s.getIdScore()!= null){
-            Score ups = sc.getScore(id);
+            Score ups = sc.getScore(s.getIdScore());
             if(ups != null){
                 ups.setScore(s.getScore());
                 if(s.getMessage() != null){
@@ -66,7 +67,8 @@ public class ControllerScore {
         return sc.getSById(id);
     }
     
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteScore(Score p, @PathVariable("id") Long id){
         boolean status = false;
         if(sc.getScore(id) != null){

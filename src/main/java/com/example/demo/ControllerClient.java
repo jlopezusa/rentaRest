@@ -40,10 +40,11 @@ public class ControllerClient {
         return cs.createClient(c);
     }
     
-    @PutMapping("/update/{id}")
-    public Client updateData(@PathVariable("id") Long id,@RequestBody Client c){
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Client updateData(@RequestBody Client c){
         if(c.getIdClient() != null){
-            Client ucl = cs.getClient(id);
+            Client ucl = cs.getClient(c.getIdClient());
             if(ucl != null){
                 if(c.getName() != null){
                     ucl.setName(c.getName());
@@ -65,11 +66,12 @@ public class ControllerClient {
     }
     
     @GetMapping("/get/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Optional<Client> getClient(@PathVariable("id") Long id){
         return cs.getClById(id);
     }
     
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public Boolean deleteClient(Client p, @PathVariable("id") Long id){
         boolean status = false;
         if(cs.getClient(id) != null){

@@ -40,10 +40,11 @@ public class ControllerAdmin {
         return as.createAdmin(a);
     }
     
-    @PutMapping("/update/{id}")
-    public Admin updateData(@PathVariable("id") Long id,@RequestBody Admin a){
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Admin updateData(@RequestBody Admin a){
         if(a.getIdAdmin() != null){
-            Admin ad = as.getAdmin(id);
+            Admin ad = as.getAdmin(a.getIdAdmin());
             if(ad != null){
                 if(a.getName() != null){
                     ad.setName(a.getName());
@@ -68,7 +69,8 @@ public class ControllerAdmin {
         return as.getAById(id);
     }
     
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteAdmin(Admin p, @PathVariable("id") Long id){
         boolean status = false;
         if(as.getAdmin(id) != null){

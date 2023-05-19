@@ -40,10 +40,11 @@ public class ControllerGama {
         return gm.createGama(g);
     }
     
-    @PutMapping("/update/{id}")
-    public Gama updateData(@PathVariable("id") Long id,@RequestBody Gama g){ 
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Gama updateData(@RequestBody Gama g){ 
         if(g.getIdGama()!= null){
-            Gama upg = gm.getGama(id);
+            Gama upg = gm.getGama(g.getIdGama());
             if(upg != null){
                 if(g.getName() != null){
                     upg.setName(g.getName());
@@ -65,7 +66,8 @@ public class ControllerGama {
         return gm.getGById(id);
     }
     
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteGama(Gama p, @PathVariable("id") Long id){
         boolean status = false;
         if(gm.getGama(id) != null){

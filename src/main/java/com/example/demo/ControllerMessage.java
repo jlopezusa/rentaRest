@@ -40,10 +40,11 @@ public class ControllerMessage {
         return mg.createMessage(m);
     }
     
-    @PutMapping("/update/{id}")
-    public Message updateData(@PathVariable("id") Long id,@RequestBody Message m){
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Message updateData(@RequestBody Message m){
         if(m.getIdMessage()!= null){
-            Message upm = mg.getMessage(id);
+            Message upm = mg.getMessage(m.getIdMessage());
             if(upm != null){
                 if(m.getMessageText() != null){
                     upm.setMessageText(m.getMessageText());
@@ -68,7 +69,8 @@ public class ControllerMessage {
         return mg.getMById(id);
     }
     
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteMessage(Message p, @PathVariable("id") Long id){
         boolean status = false;
         if(mg.getMessage(id) != null){

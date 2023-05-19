@@ -40,10 +40,11 @@ public class ControllerReservation {
         return rs.createReservation(r);
     }
     
-    @PutMapping("/update/{id}")
-    public Reservation updateData(@PathVariable("id") Long id,@RequestBody Reservation r){
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Reservation updateData(@RequestBody Reservation r){
         if(r.getIdReservation()!= null){
-            Reservation upr = rs.getReservation(id);
+            Reservation upr = rs.getReservation(r.getIdReservation());
             if(upr != null){
                 if(r.getStartDate() != null){
                     upr.setStartDate(r.getStartDate());
@@ -74,7 +75,8 @@ public class ControllerReservation {
         return rs.getRById(id);
     }
     
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteReservation(Reservation p, @PathVariable("id") Long id){
         boolean status = false;
         if(rs.getReservation(id) != null){

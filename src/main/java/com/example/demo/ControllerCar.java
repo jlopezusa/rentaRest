@@ -40,10 +40,11 @@ public class ControllerCar {
         return cr.createCar(c);
     }
     
-    @PutMapping("/update/{id}")
-    public Car updateData(@PathVariable("id") Long id,@RequestBody Car c){
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Car updateData(@RequestBody Car c){
         if(c.getIdCar() != null){
-            Car ucar = cr.getCar(id);
+            Car ucar = cr.getCar(c.getIdCar());
             if(ucar != null){
                 if(c.getName() != null){
                     ucar.setName(c.getName());
@@ -64,12 +65,13 @@ public class ControllerCar {
         }
     }
     
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public Optional<Car> getCar(@PathVariable("id") Long id){
         return cr.getCById(id);
     }
     
     @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteCar(Car p, @PathVariable("id") Long id){
         boolean status = false;
         if(cr.getCar(id) != null){
