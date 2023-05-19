@@ -70,7 +70,7 @@ public class ControllerCar {
         return cr.getCById(id);
     }
     
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteCar(Car p, @PathVariable("id") Long id){
         boolean status = false;

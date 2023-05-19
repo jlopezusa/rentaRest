@@ -72,6 +72,7 @@ public class ControllerClient {
     }
     
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Boolean deleteClient(Client p, @PathVariable("id") Long id){
         boolean status = false;
         if(cs.getClient(id) != null){
