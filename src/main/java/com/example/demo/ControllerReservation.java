@@ -4,13 +4,19 @@
  */
 package com.example.demo;
 
+import com.example.entity.Client;
+import com.example.entity.DTO.CompletedAndCancelled;
+import com.example.entity.DTO.TotalAndClient;
 import com.example.entity.Reservation;
 import com.example.servicios.ReservationServices;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
  *
@@ -83,5 +89,43 @@ public class ControllerReservation {
             status = rs.deleteReservation(id);
         }
         return status;
+    }
+    
+    @GetMapping("/report-dates/{fecha1}/{fecha2}")
+    public List<Reservation> getReservationsBetweenDatesReport(@PathVariable("fecha1") String fechaA, @PathVariable("fecha2") String fechaB){
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+        Date a = new Date();
+        Date b = new Date();
+        try{
+            a = parser.parse(fechaA);
+            b = parser.parse(fechaB);
+        }catch(ParseException exception){
+            exception.printStackTrace();
+        }
+        if(a.before(b)){
+            return rs.getReservationsBetweenDates(a, b);
+        }else{
+            return new ArrayList<>();
+        }
+    }
+    
+    @GetMapping("/report-status")
+    public CompletedAndCancelled getReservationStatusReport(){
+        List<Reservation> completed = rs.getReservationsByStatus("completed");
+        List<Reservation> cancelled = rs.getReservationsByStatus("cancelled");
+        Long cantidadCompletada = (long) completed.size();
+        Long cantidadCancelada = (long) cancelled.size();
+        CompletedAndCancelled respuesta = new CompletedAndCancelled(cantidadCompletada,cantidadCancelada);
+        return respuesta;
+    }
+    
+    @GetMapping("/report-clients")
+    public List<TotalAndClient> getTopClientsReport(){
+        List<TotalAndClient> respuesta = new ArrayList<>();
+        List<Object[]> reporte = rs.getTotalReservationsByClient();
+        for(Object[] pareja: reporte){
+            respuesta.add(new TotalAndClient((Long) pareja[1], (Client) pareja[0]));
+        }
+        return respuesta;
     }
 }

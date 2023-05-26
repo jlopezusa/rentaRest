@@ -66,7 +66,7 @@ public class ControllerClient {
     }
     
     @GetMapping("/get/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    //@ResponseStatus(HttpStatus.NO_CONTENT)
     public Optional<Client> getClient(@PathVariable("id") Long id){
         return cs.getClById(id);
     }

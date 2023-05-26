@@ -56,6 +56,7 @@ public class ControllerCar {
                 if(c.getDescription()!= null){
                     ucar.setDescription(c.getDescription());
                 }
+                ucar.setGama(c.getGama());
                 return cr.createCar(ucar);
             }else{
                 return c;
@@ -65,7 +66,7 @@ public class ControllerCar {
         }
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public Optional<Car> getCar(@PathVariable("id") Long id){
         return cr.getCById(id);
     }

@@ -4,9 +4,12 @@
  */
 package com.example.servicios;
 
+import com.example.entity.DTO.TotalAndClient;
 import com.example.repository.IReservationDao;
 import com.example.entity.Reservation;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,5 +48,17 @@ public class ReservationServices {
         }catch(Exception err){
             return false;
         }
+    }
+    
+    public List<Reservation> getReservationsBetweenDates(Date fechaA, Date fechaB){
+        return reservationDao.findAllByStartDateAfterAndDevolutionDateBefore(fechaA, fechaB);
+    }
+    
+    public List<Reservation> getReservationsByStatus(String status){
+        return reservationDao.findAllByStatus(status);
+    }
+    
+    public List<Object[]> getTotalReservationsByClient(){
+        return reservationDao.getTotalReservationsByClient();
     }
 }
