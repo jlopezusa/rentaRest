@@ -4,7 +4,6 @@
  */
 package com.example.servicios;
 
-import com.example.entity.DTO.TotalAndClient;
 import com.example.repository.IReservationDao;
 import com.example.entity.Reservation;
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ public class ReservationServices {
     }
     
     public Reservation createReservation(Reservation r){
-        r.setStatus("created");
         return reservationDao.save(r);
     }
     

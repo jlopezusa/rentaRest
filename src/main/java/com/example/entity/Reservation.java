@@ -26,7 +26,7 @@ public class Reservation implements Serializable{
     @Column(name="devolution_date")
     private Date devolutionDate;
     //@Column(columnDefinition="default 'created'")
-    private String status;
+    private String status = "created";
     /*@CreationTimestamp
     @Column(nullable = false, updatable = false, columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
     private Date dateCreated;*/
